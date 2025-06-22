@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Penyakit Jantung</title>
+  <style>
+    :root {
+      --bg: #e8f0f8;
+      --card: #ffffff;
+      --text: #2c3e50;
+      --accent: #2980b9;
+      --footer: #d6eaf8;
+    }
+
+    [data-theme="dark"] {
+      --bg: #121212;
+      --card: #1e1e1e;
+      --text: #f0f0f0;
+      --accent: #58d68d;
+      --footer: #2c3e50;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+      transition: all 0.3s ease;
+    }
+
+    header {
+      background: linear-gradient(to right, #3498db, #5dade2);
+      padding: 20px 0;
+      text-align: center;
+      color: white;
+      border-bottom: 4px solid #2980b9;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 30px;
+      letter-spacing: 1px;
+    }
+
+    .container {
+      display: flex;
+      gap: 20px;
+      max-width: 1200px;
+      padding: 30px;
+      margin: auto;
+    }
+
+    .left {
+      flex: 2;
+    }
+
+    .right {
+      flex: 1;
+      background-color: var(--card);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.08);
+      height: fit-content;
+      position: sticky;
+      top: 100px;
+    }
+
+    .section {
+      background-color: var(--card);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.08);
+      margin-bottom: 30px;
+      overflow-x: auto;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease-out;
+      text-align: left;
+    }
+
+    .section.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .section h2 {
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .description {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 15px;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      margin: 0;
+      border-radius: 10px;
+      object-fit: contain;
+    }
+
+    .tips-list {
+      padding-left: 20px;
+    }
+
+    .tips-list li {
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+
+    .download {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .download button {
+      background-color: var(--accent);
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background-color: var(--footer);
+      font-size: 14px;
+      color: #7f8c8d;
+    }
+
+    #scrollBar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: var(--accent);
+      width: 0%;
+      z-index: 9999;
+    }
+
+    .toggle-mode {
+      position: fixed;
+      right: 20px;
+      top: 20px;
+      background: white;
+      color: black;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+
+<div id="scrollBar"></div>
+<button class="toggle-mode" onclick="toggleMode()">🌗 Mode</button>
+
+<header>
+  <h1>Dashboard Analisis Dataset Penyakit Jantung</h1>
+</header>
+
+<div class="container">
+  <!-- KIRI: Grafik -->
+  <div class="left">
+    <div class="section">
+      <h2>📘 Deskripsi Dataset</h2>
+      <p class="description">
+        Dataset ini berasal dari <strong>UCI Heart Disease</strong> dan berisi 303 entri pasien.
+        Mencakup atribut medis seperti umur, tekanan darah, kolesterol, dan hasil tes lainnya.
+        Tujuannya adalah untuk memprediksi risiko penyakit jantung berdasarkan atribut tersebut.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>📊 Grafik 1: Jumlah Pasien Sehat vs Berisiko</h2>
+      <p class="description">
+        Perbandingan jumlah pasien yang sehat (<code>target = 0</code>) dan pasien dengan risiko
+        penyakit jantung (<code>target = 1</code>).
+      </p>
+      <img src="/static/plot1.png" alt="Grafik Target">
+    </div>
+
+    <div class="section">
+      <h2>📊 Grafik 2: Distribusi Usia Pasien</h2>
+      <p class="description">
+        Sebagian besar pasien berada dalam rentang usia 40–60 tahun, kelompok usia yang rentan terhadap
+        penyakit jantung.
+      </p>
+      <img src="/static/plot2.png" alt="Grafik Usia">
+    </div>
+
+    <div class="section">
+      <h2>📊 Grafik 3: Heatmap Korelasi Antar Fitur</h2>
+      <p class="description">
+        Korelasi antar fitur numerik menunjukkan hubungan antar variabel, membantu dalam seleksi fitur
+        penting untuk prediksi.
+      </p>
+      <img src="/static/plot_heatmap.png" alt="Heatmap Korelasi">
+    </div>
+
+    <div class="download">
+      <button onclick="window.print()">🖨️ Simpan sebagai PDF</button>
+    </div>
+  </div>
+
+  <!-- KANAN: Tips -->
+  <div class="right">
+    <h2>❤️ Tips Menjaga Kesehatan Jantung</h2>
+    <ul class="tips-list">
+      <li>🫀 Rutin berolahraga minimal 30 menit per hari</li>
+      <li>🍎 Konsumsi buah dan sayur segar setiap hari</li>
+      <li>🚭 Hindari rokok dan alkohol</li>
+      <li>🧂 Batasi konsumsi garam dan makanan tinggi lemak</li>
+      <li>🧘 Kelola stres dengan meditasi atau hobi</li>
+      <li>💧 Minum air putih yang cukup</li>
+      <li>🩺 Lakukan pemeriksaan kesehatan rutin</li>
+      <li>🛌 Tidur yang cukup dan berkualitas</li>
+      <li>📉 Jaga berat badan ideal dan kontrol kolesterol</li>
+    </ul>
+  </div>
+</div>
+
+<footer>
+  Analisis Penyakit Jantung | Dibuat oleh Kayla Mely Kamelia | 2267003
+</footer>
+
+<script>
+  // Scroll progress bar
+  window.onscroll = function () {
+    let winScroll = document.documentElement.scrollTop;
+    let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    let scrolled = (winScroll / height) * 100;
+    document.getElementById("scrollBar").style.width = scrolled + "%";
+  };
+
+  // Fade-in on scroll
+  const sections = document.querySelectorAll('.section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  sections.forEach(section => observer.observe(section));
+
+  // Toggle light/dark mode
+  function toggleMode() {
+    const html = document.documentElement;
+    if (html.getAttribute("data-theme") === "dark") {
+      html.removeAttribute("data-theme");
+    } else {
+      html.setAttribute("data-theme", "dark");
+    }
+  }
+</script>
+
+</body>
+</html>
